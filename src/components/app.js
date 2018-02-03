@@ -1,12 +1,10 @@
 angular.module('video-player')
 
   .component('app', {
-    // bindings: {
-    //   youTube: '<'
-    // },
-    controller: function($window, youTube) {
-      this.videoList = window.exampleVideoData;
-      this.currentVideo = window.exampleVideoData[0];
+ 
+    controller: function(youTube) {
+      this.videoList = null;
+      this.currentVideo = null;
       
       this.handleClick = (arg) => {
         this.currentVideo = arg;
@@ -14,19 +12,28 @@ angular.module('video-player')
 
       this.handleSearchClick = (query) => {
         var changeThis = (data) => {
-          this.currentVideo = data[0].id.videoId;
           this.videoList = data;
-          console.log('i have data', this.videoList);
+          this.currentVideo = this.videoList[0];
         };
       
         var queryObject = {
           key: window.YOUTUBE_API_KEY,
           q: query,
-          max: 5
+          max: 20
         };
         youTube.search(queryObject, changeThis);     
       };
+      this.init = () => {
+        var changeThis = (data) => {
+          this.videoList = data;
+          this.currentVideo = this.videoList[0];
+        };  
+        youTube.search({
+          key: window.YOUTUBE_API_KEY,
+          q: 'dogs',
+          max: 20}, changeThis);
+      };
+      this.init();
     },
-    
     templateUrl: 'src/templates/app.html'
   });

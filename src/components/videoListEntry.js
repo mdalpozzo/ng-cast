@@ -3,6 +3,5 @@ angular.module('video-player')
     bindings: {
       video: '<'
     },
-
     templateUrl: 'src/templates/videoListEntry.html'
   });
